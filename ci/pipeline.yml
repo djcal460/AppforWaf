@@ -134,19 +134,19 @@ jobs:
             build_args:
               BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
 
-    #     - task: create-fargate-resources-stage
-    #       file: git-repo-non-prod/ci/tasks/fargate.yml
-    #       input_mapping:
-    #         source: git-repo-non-prod
-    #       params:
-    #         <<: *aws_config_non_prod
-    #         <<: *deploy_vars_default_fargate
+        - task: create-fargate-resources-stage
+          file: git-repo-non-prod/ci/tasks/fargate.yml
+          input_mapping:
+            source: git-repo-non-prod
+          params:
+            <<: *aws_config_non_prod
+            <<: *deploy_vars_default_fargate
 
-    #     - task: create-route53-resource-stage
-    #       file: git-repo-non-prod/ci/tasks/route53-create.yml
-    #       input_mapping:
-    #         source: git-repo-non-prod
-    #       params:
-    #         <<: *aws_config_non_prod
-    #         <<: *deploy_vars_default_route53            
+        - task: create-route53-resource-stage
+          file: git-repo-non-prod/ci/tasks/route53-create.yml
+          input_mapping:
+            source: git-repo-non-prod
+          params:
+            <<: *aws_config_non_prod
+            <<: *deploy_vars_default_route53            
 
