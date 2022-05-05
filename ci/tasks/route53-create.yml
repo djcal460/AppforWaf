@@ -2,7 +2,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: yogeek/terraform-jq
+    repository: hashicorp/terraform
     tag: 'latest'
 inputs:
   - name: source
