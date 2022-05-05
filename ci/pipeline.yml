@@ -73,25 +73,21 @@ resources:
     - name: artifacts-non-prod
       type: s3
       source: ((non-prod.artifacts.s3))
-    - name: webtier-docker-image-stage
-      type: docker-image
-      source: ((stage.docker.image))      
+    # - name: webtier-docker-image-stage
+    #   type: docker-image
+    #   source: ((stage.docker.image))      
 
 groups:
   - name: All
     jobs:
       - create_artifact_non_prod
-      - deploy_artifact_stage
-  - name: non-prod
-    jobs:
-      - create_artifact_non_prod
-      - deploy_artifact_stage
+      # - deploy_artifact_stage
   - name: build & upload
     jobs:
       - create_artifact_non_prod
-  - name: deploy-non-prod
-    jobs:
-      - deploy_artifact_stage
+  # - name: deploy-non-prod
+  #   jobs:
+  #     - deploy_artifact_stage
 
 jobs:        
     - name: create_artifact_non_prod
@@ -100,7 +96,7 @@ jobs:
         - get: version-number-non-prod
           params: { bump: patch }
         - put: version-number-non-prod
-          params: { bump: patch, file: version-number/number }
+          params: { bump: patch, file: version-number-non-prod/number }
         - task: build
           file: git-repo-non-prod/ci/tasks/build.yml
           input_mapping:
@@ -109,48 +105,48 @@ jobs:
         - put: artifacts-non-prod
           params: { file: artifacts/*.gz }
 
-    - name: deploy_artifact_stage
-      plan:
-        - get: git-repo-non-prod
-          trigger: false
-          passed: [create_artifact_non_prod]
-        - get: version-number-non-prod
-        - get: artifacts-non-prod
+    # - name: deploy_artifact_stage
+    #   plan:
+    #     - get: git-repo-non-prod
+    #       trigger: false
+    #       passed: [create_artifact_non_prod]
+    #     - get: version-number-non-prod
+    #     - get: artifacts-non-prod
 
-        - task: create-ecr-repo-stage
-          file: git-repo-non-prod/ci/tasks/ecrcreate.yml
-          input_mapping:
-            source: git-repo-non-prod
-          params:
-            <<: *aws_config_non_prod
-            <<: *deploy_vars_default_ecr
+    #     - task: create-ecr-repo-stage
+    #       file: git-repo-non-prod/ci/tasks/ecrcreate.yml
+    #       input_mapping:
+    #         source: git-repo-non-prod
+    #       params:
+    #         <<: *aws_config_non_prod
+    #         <<: *deploy_vars_default_ecr
             
-        - task: docker-files
-          file: git-repo-non-prod/ci/tasks/dockerimage.yml
-          input_mapping:
-            source: git-repo-non-prod
-            s3-source: artifacts-non-prod
-            version: version-number-non-prod
+    #     - task: docker-files
+    #       file: git-repo-non-prod/ci/tasks/dockerimage.yml
+    #       input_mapping:
+    #         source: git-repo-non-prod
+    #         s3-source: artifacts-non-prod
+    #         version: version-number-non-prod
 
-        - put: webtier-docker-image-stage
-          params:
-            build: builtFiles/app
-            build_args:
-              BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
+    #     - put: webtier-docker-image-stage
+    #       params:
+    #         build: builtFiles/app
+    #         build_args:
+    #           BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
 
-        - task: create-fargate-resources-stage
-          file: git-repo-non-prod/ci/tasks/fargate.yml
-          input_mapping:
-            source: git-repo-non-prod
-          params:
-            <<: *aws_config_non_prod
-            <<: *deploy_vars_default_fargate
+    #     - task: create-fargate-resources-stage
+    #       file: git-repo-non-prod/ci/tasks/fargate.yml
+    #       input_mapping:
+    #         source: git-repo-non-prod
+    #       params:
+    #         <<: *aws_config_non_prod
+    #         <<: *deploy_vars_default_fargate
 
-        - task: create-route53-resource-stage
-          file: git-repo-non-prod/ci/tasks/route53-create.yml
-          input_mapping:
-            source: git-repo-non-prod
-          params:
-            <<: *aws_config_non_prod
-            <<: *deploy_vars_default_route53            
+    #     - task: create-route53-resource-stage
+    #       file: git-repo-non-prod/ci/tasks/route53-create.yml
+    #       input_mapping:
+    #         source: git-repo-non-prod
+    #       params:
+    #         <<: *aws_config_non_prod
+    #         <<: *deploy_vars_default_route53            
 

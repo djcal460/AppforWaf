@@ -10,7 +10,6 @@ npm set progress=false
 cd source
 ls -ltr
 npm ci --prefix ./app
-npm run start --prefix ./app
 
 set +e
 ls -ltr
