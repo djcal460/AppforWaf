@@ -24,7 +24,7 @@ non-prod:
 stage:
     docker:
        image:
-          repository: ((ecr-repo))/derekwebtier-non-prod
+          repository: ((ecr-repo))/derekwebtier-stage
           aws_access_key_id: ((awskey))
           aws_secret_access_key: ((awssecret))
        

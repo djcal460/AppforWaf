@@ -73,9 +73,9 @@ resources:
     - name: artifacts-non-prod
       type: s3
       source: ((non-prod.artifacts.s3))
-    # - name: webtier-docker-image-stage
-    #   type: docker-image
-    #   source: ((stage.docker.image))      
+    - name: webtier-docker-image-stage
+      type: docker-image
+      source: ((stage.docker.image))      
 
 groups:
   - name: All
@@ -121,18 +121,18 @@ jobs:
             <<: *aws_config_non_prod
             <<: *deploy_vars_default_ecr
             
-    #     - task: docker-files
-    #       file: git-repo-non-prod/ci/tasks/dockerimage.yml
-    #       input_mapping:
-    #         source: git-repo-non-prod
-    #         s3-source: artifacts-non-prod
-    #         version: version-number-non-prod
+        - task: docker-files
+          file: git-repo-non-prod/ci/tasks/dockerimage.yml
+          input_mapping:
+            source: git-repo-non-prod
+            s3-source: artifacts-non-prod
+            version: version-number-non-prod
 
-    #     - put: webtier-docker-image-stage
-    #       params:
-    #         build: builtFiles/app
-    #         build_args:
-    #           BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
+        - put: webtier-docker-image-stage
+          params:
+            build: builtFiles/app
+            build_args:
+              BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
 
     #     - task: create-fargate-resources-stage
     #       file: git-repo-non-prod/ci/tasks/fargate.yml
