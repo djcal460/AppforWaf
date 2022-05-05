@@ -9,7 +9,7 @@ npm set progress=false
 
 cd source
 ls -ltr
-npm ci --prefix ./app
+npm install ./app
 
 set +e
 ls -ltr
