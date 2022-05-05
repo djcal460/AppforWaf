@@ -9,9 +9,7 @@ npm set progress=false
 
 cd source
 ls -ltr
-npm install body-parser
-npm install express
-npm install mongodb
+npm ci --prefix ./app
 
 
 set +e
