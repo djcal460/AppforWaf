@@ -81,13 +81,13 @@ groups:
   - name: All
     jobs:
       - create_artifact_non_prod
-      # - deploy_artifact_stage
+      - deploy_artifact_stage
   - name: build & upload
     jobs:
       - create_artifact_non_prod
-  # - name: deploy-non-prod
-  #   jobs:
-  #     - deploy_artifact_stage
+  - name: deploy-non-prod
+    jobs:
+      - deploy_artifact_stage
 
 jobs:        
     - name: create_artifact_non_prod
@@ -105,21 +105,21 @@ jobs:
         - put: artifacts-non-prod
           params: { file: artifacts/*.gz }
 
-    # - name: deploy_artifact_stage
-    #   plan:
-    #     - get: git-repo-non-prod
-    #       trigger: false
-    #       passed: [create_artifact_non_prod]
-    #     - get: version-number-non-prod
-    #     - get: artifacts-non-prod
+    - name: deploy_artifact_stage
+      plan:
+        - get: git-repo-non-prod
+          trigger: false
+          passed: [create_artifact_non_prod]
+        - get: version-number-non-prod
+        - get: artifacts-non-prod
 
-    #     - task: create-ecr-repo-stage
-    #       file: git-repo-non-prod/ci/tasks/ecrcreate.yml
-    #       input_mapping:
-    #         source: git-repo-non-prod
-    #       params:
-    #         <<: *aws_config_non_prod
-    #         <<: *deploy_vars_default_ecr
+        - task: create-ecr-repo-stage
+          file: git-repo-non-prod/ci/tasks/ecrcreate.yml
+          input_mapping:
+            source: git-repo-non-prod
+          params:
+            <<: *aws_config_non_prod
+            <<: *deploy_vars_default_ecr
             
     #     - task: docker-files
     #       file: git-repo-non-prod/ci/tasks/dockerimage.yml
