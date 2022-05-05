@@ -1,0 +1,28 @@
+---
+#shared
+prefix: 'derekwebtier'
+docker-image-port: '8001'
+ecs-container-port: '8001'
+healthcheck: '/healthcheck'
+fargate-cpu: '256'
+fargate-memory: '512'
+routetable-main-cidr-igw: '0.0.0.0/0'
+cidr-ipv4-all: '0.0.0.0/0'
+protocol-all: '-1'
+protocol-tcp: 'tcp'
+ports-all: '0'
+port-https: '443'
+region-east1: 'us-east-1'
+autoscaling-min-capacity-east1: '1'
+autoscaling-max-capacity-east1: '4'
+ecs-desired-tasks-east1: '1'
+project-path: "frame/web-tier/infra"
+
+#non-prod related
+https-domain-name-non-prod: '*.byebye.click'
+dockerfile-env-base-path-stg: 'https://derek-stage.byebye.click'
+environment-stage: 'stage'
+workspace-stage: 'stage-east1'
+vpc-id-stage: ((vpcid))
+image-uri-stage: ((ecr-repo))
+s3bucket-non-prod: 'derek-webtier-non-prod'

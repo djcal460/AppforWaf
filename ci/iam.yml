@@ -1,0 +1,8 @@
+---
+    #non-prod
+    aws-key-np: ((awskey))
+    aws-secret-np: ((awssecret))
+
+    ecs-task-execution-role: 'ecsTaskExecutionRole'
+    ecs-task-role: 'ecsTaskExecutionRole'
+    ecs-auto-scale-role: 'AWSServiceRoleForApplicationAutoScaling_ECSService'

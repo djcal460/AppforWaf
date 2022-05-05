@@ -1,0 +1,31 @@
+#non-prod
+non-prod:
+    git:
+       uri: 'git@github.com:djcal460/AppforWaf.git'
+       private_key: |
+         ((githubssh))
+       branch: 'main'
+    version:
+       s3: 
+          driver: s3
+          initial_version: 1.0.0
+          access_key_id: ((awskey))
+          secret_access_key: ((awssecret))
+          bucket: "derek-webtier-non-prod"
+          key: frame/web-tier/version/version-number
+          region: "us-east-1"
+    artifacts:
+       s3:
+          access_key_id: ((awskey))
+          secret_access_key: ((awssecret))
+          bucket: "derek-webtier-non-prod"
+          regexp: frame/web-tier/artifacts/webtier.(.*).gz
+          region: "us-east-1"   
+stage:
+    docker:
+       image:
+          repository: ((ecr-repo))/derekwebtier-non-prod
+          aws_access_key_id: ((awskey))
+          aws_secret_access_key: ((awssecret))
+       
+

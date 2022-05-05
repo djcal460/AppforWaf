@@ -1,0 +1,16 @@
+---
+    platform: linux
+    image_resource:
+      type: docker-image
+      source:
+        repository: hub.comcast.net/xoe-digital/terraform-jq
+        tag: 'v0.12.24'
+    inputs:
+      - name: source-repo
+      - name: gtm-source
+    outputs:
+      - name: blue-green-stat
+    run:
+      path: sh
+      args:
+        - source-repo/frame/web-tier/ci/tasks/determine-cold-hot.sh 
