@@ -16,11 +16,11 @@ region-east1: 'us-east-1'
 autoscaling-min-capacity-east1: '1'
 autoscaling-max-capacity-east1: '4'
 ecs-desired-tasks-east1: '1'
-project-path: "frame/web-tier/infra"
+project-path: "infra"
 
 #non-prod related
 https-domain-name-non-prod: '*.byebye.click'
-dockerfile-env-base-path-stg: 'https://derek-stage.byebye.click'
+dockerfile-env-base-path-stg: 'https://webtier-stage.byebye.click'
 environment-stage: 'stage'
 workspace-stage: 'stage-east1'
 vpc-id-stage: ((vpcid))

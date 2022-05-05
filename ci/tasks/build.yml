@@ -13,4 +13,4 @@
     run:
       path: sh
       args:
-        - source/frame/web-tier/ci/tasks/build.sh
+        - source/ci/tasks/build.sh

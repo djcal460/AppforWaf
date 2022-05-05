@@ -63,7 +63,6 @@ resource_types:
     source:
       repository: cfcommunity/slack-notification-resource
 
-
 resources:
     - name: git-repo-non-prod
       type: git
@@ -77,29 +76,6 @@ resources:
     - name: webtier-docker-image-stage
       type: docker-image
       source: ((stage.docker.image))      
-
-    - name: git-repo-prod
-      type: git
-      source: ((prod.git))
-    - name: version-number-prod
-      type: semver
-      source: ((prod.version.s3))
-    - name: artifacts-prod
-      type: s3
-      source: ((prod.artifacts.s3))
-    - name: webtier-docker-image-blue-east1
-      type: docker-image
-      source: ((prod-blue-east1.docker.image))
-    - name: webtier-docker-image-blue-west2
-      type: docker-image
-      source: ((prod-blue-west2.docker.image))      
-    - name: webtier-docker-image-green-east1
-      type: docker-image
-      source: ((prod-green-east1.docker.image))
-    - name: webtier-docker-image-green-west2
-      type: docker-image
-      source: ((prod-green-west2.docker.image))       
-
 
 groups:
   - name: All
@@ -126,26 +102,11 @@ jobs:
         - put: version-number-non-prod
           params: { bump: patch, file: version-number/number }
         - task: build
-          file: git-repo-non-prod/frame/web-tier/ci/tasks/build.yml
+          file: git-repo-non-prod/ci/tasks/build.yml
           input_mapping:
             source: git-repo-non-prod
             version: version-number-non-prod
         - put: artifacts-non-prod
-          params: { file: artifacts/*.gz }
-
-    - name: create_artifact_prod
-      plan:
-        - get: git-repo-prod
-        - get: version-number-prod
-          params: { bump: patch }
-        - put: version-number-prod
-          params: { bump: patch, file: version-number/number }
-        - task: build
-          file: git-repo-prod/frame/web-tier/ci/tasks/build.yml
-          input_mapping:
-            source: git-repo-prod
-            version: version-number-prod
-        - put: artifacts-prod
           params: { file: artifacts/*.gz }
 
     - name: deploy_artifact_stage
@@ -157,7 +118,7 @@ jobs:
         - get: artifacts-non-prod
 
         - task: create-ecr-repo-stage
-          file: git-repo-non-prod/frame/web-tier/ci/tasks/ecrcreate.yml
+          file: git-repo-non-prod/ci/tasks/ecrcreate.yml
           input_mapping:
             source: git-repo-non-prod
           params:
@@ -165,7 +126,7 @@ jobs:
             <<: *deploy_vars_default_ecr
             
         - task: docker-files
-          file: git-repo-non-prod/frame/web-tier/ci/tasks/dockerimage.yml
+          file: git-repo-non-prod/ci/tasks/dockerimage.yml
           input_mapping:
             source: git-repo-non-prod
             s3-source: artifacts-non-prod
@@ -173,12 +134,12 @@ jobs:
 
         - put: webtier-docker-image-stage
           params:
-            build: builtFiles/frame/web-tier
+            build: builtFiles/app
             build_args:
               BASE_PATH_ARG: ((dockerfile-env-base-path-stg))
 
         - task: create-fargate-resources-stage
-          file: git-repo-non-prod/frame/web-tier/ci/tasks/fargate.yml
+          file: git-repo-non-prod/ci/tasks/fargate.yml
           input_mapping:
             source: git-repo-non-prod
           params:
@@ -186,7 +147,7 @@ jobs:
             <<: *deploy_vars_default_fargate
 
         - task: create-route53-resource-stage
-          file: git-repo-non-prod/frame/web-tier/ci/tasks/route53-create.yml
+          file: git-repo-non-prod/ci/tasks/route53-create.yml
           input_mapping:
             source: git-repo-non-prod
           params:

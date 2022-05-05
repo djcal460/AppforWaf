@@ -14,4 +14,4 @@
     run:
       path: sh
       args:
-        - source/frame/web-tier/ci/tasks/dockerimage.sh
+        - source/ci/tasks/dockerimage.sh

@@ -3,11 +3,11 @@
     image_resource:
       type: docker-image
       source:
-        repository: hub.comcast.net/xoe-digital/terraform-jq
-        tag: 'v0.12.24'
+        repository: yogeek/terraform-jq
+        tag: 'latest'
     inputs:
       - name: source
     run:
       path: sh
       args:
-        - source/frame/web-tier/ci/tasks/ecrcreate.sh
+        - source/ci/tasks/ecrcreate.sh

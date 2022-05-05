@@ -11,6 +11,6 @@ data "terraform_remote_state" "tf_state" {
     encrypt = true
     workspace_key_prefix = "frame/web-tier/tf-state"
     profile = "default"
-    dynamodb_table = "xoe-digital-tfstate-lock"
+    dynamodb_table = "derek-tfstate-lock"
   }
 }
