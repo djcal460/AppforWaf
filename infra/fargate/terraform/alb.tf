@@ -1,6 +1,5 @@
 
 data "aws_subnets" "public" {
-  vpc_id = var.vpc_id
 
   tags = {
     Type = "Public"
