@@ -2,12 +2,7 @@ data "aws_vpc" "selected"{
   id = var.vpc_id
 }
 
-data "aws_subnets" "public" {
 
-  tags = {
-    Type = "Public"
-  }
-}
 resource "aws_ec2_transit_gateway" "my-test-tgw" {
   description                     = "my-test-transit-gateway"
   amazon_side_asn                 = 64512
