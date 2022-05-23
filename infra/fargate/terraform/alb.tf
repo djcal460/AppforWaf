@@ -1,5 +1,5 @@
 
-data "aws_subnet" "public" {
+data "aws_subnets" "public" {
   vpc_id = var.vpc_id
 
   tags = {
@@ -10,7 +10,7 @@ data "aws_subnet" "public" {
 
 resource "aws_alb" "alb" {
   name            = var.naming
-  subnets         = data.aws_subnet.public.ids
+  subnets         = data.aws_subnets.public.ids
   security_groups = [aws_security_group.sg_lb.id]
   tags          = {
     Name  = "${var.naming}-loadbalance"
