@@ -1,7 +1,8 @@
-data "aws_subnet_ids" "public" {
-  vpc_id = var.vpc_id
-  tags = {
-    Type = var.tag_public
+
+data "aws_subnets" "public" {
+  filter {
+    name   = var.vpc_id
+    values = [var.vpc_id]
   }
 }
 resource "aws_alb" "alb" {
