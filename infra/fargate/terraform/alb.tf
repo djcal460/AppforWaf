@@ -7,7 +7,7 @@ data "aws_subnets" "public" {
 }
 resource "aws_alb" "alb" {
   name            = var.naming
-  subnets         = data.aws_subnet_ids.public.ids
+  subnets         = data.aws_subnets.public.ids
   security_groups = [aws_security_group.sg_lb.id]
   tags          = {
     Name  = "${var.naming}-loadbalance"
