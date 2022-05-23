@@ -1,13 +1,16 @@
 
-data "aws_subnets" "public" {
-  filter {
-    name   = var.vpc_id
-    values = [var.vpc_id]
+data "aws_subnet" "public" {
+  vpc_id = var.vpc_id
+
+  tags = {
+    Type = "Public"
   }
 }
+
+
 resource "aws_alb" "alb" {
   name            = var.naming
-  subnets         = data.aws_subnets.public.ids
+  subnets         = data.aws_subnet.public.ids
   security_groups = [aws_security_group.sg_lb.id]
   tags          = {
     Name  = "${var.naming}-loadbalance"
