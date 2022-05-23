@@ -19,7 +19,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "my-test-transit-gateway-attac
   vpc_id             = "${var.vpc_id}"
   dns_support        = "enable"
 
-  subnet_ids = [data.aws_subnets.public.ids]
+  subnet_ids = data.aws_subnets.public.ids
 
 
 }
