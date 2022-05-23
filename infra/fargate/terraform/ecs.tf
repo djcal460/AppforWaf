@@ -45,7 +45,7 @@ resource "aws_ecs_service" "webtier" {
   launch_type     = "FARGATE"
   network_configuration {
     security_groups  = [aws_security_group.sg_ecs_tasks.id]
-    subnets          = data.aws_subnet_ids.public.ids
+    subnets          = data.aws_subnets.public.ids
     assign_public_ip = true
   }
   load_balancer {
