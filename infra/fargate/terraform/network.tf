@@ -25,7 +25,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "my-test-transit-gateway-attac
 }
 resource "aws_route" "route" {
   count                  = var.rt_non_prod ? 1 : 0 
-  gateway_id             = data.aws_ec2_transit_gateway.my-test-tgw.id
+  gateway_id             = aws_ec2_transit_gateway.my-test-tgw.id
   route_table_id         = data.aws_vpc.selected.main_route_table_id
   destination_cidr_block = var.routetable_main_cidr_igw
 }
