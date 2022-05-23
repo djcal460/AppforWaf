@@ -11,9 +11,7 @@ resource "aws_ec2_transit_gateway" "my-test-tgw" {
   default_route_table_propagation = "enable"
   dns_support                     = "enable"
   vpn_ecmp_support                = "enable"
-  tags {
-    Name = "my-test-transit-gateway"
-  }
+
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "my-test-transit-gateway-attachment" {
@@ -23,9 +21,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "my-test-transit-gateway-attac
 
   subnet_ids = [data.aws_subnets.public.ids]
 
-  tags {
-    Name = "my-test-tgw-vpc-attachment"
-  }
+
 }
 resource "aws_route" "route" {
   count                  = var.rt_non_prod ? 1 : 0 
